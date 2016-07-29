@@ -25,15 +25,22 @@ class CalculadoraDesconto
         
         // percorre o array para instanciar os Objetos
         for ($i = 0; $i < $tamanhoArray; $i++) {
-            $arrObj[$i] = new $descontos[$i];
+            // verifica se já foi instanciado um objeto neste índice do array
+            if (!isset($arrObj[$i])) {
+                $arrObj[$i] = new $descontos[$i];
+            }
             // se o índice do array for o ultimo
             // então não seta o próximo objeto
             if ($i < ($tamanhoArray - 1)) {
-                // seta o próximo objeto
-                $arrObj[$i]->setNextDesconto(new $descontos[$i + 1]);
+                if($arrObj[0]->desconto($orcamento) != 0) {
+                    // seta o próximo objeto
+                    $arrObj[$i + 1] = new $descontos[$i + 1];
+                    var_dump($arrObj);
+                    $arrObj[$i]->setNextDesconto($arrObj[$i + 1]);
+                    return $arrObj[0]->desconto($orcamento);
+                }
             }
         }
-
-        return $arrObj[0]->desconto($orcamento);
+        return 0;//$arrObj[0]->desconto($orcamento);
     }
 }
